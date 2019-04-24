@@ -1,16 +1,19 @@
 # pythonEasyShogi
-shogi is a traditional and popular board game in Japan, kind of a catagory of chess
-	this is a python shogi library that made for fun. (there is a more official one in github)
-	has not fully tested yet, but work well most of the time.
-	only test under Python 3.7, Windows 10, but should be work on Python 3.6 and other OS that can run Python. 
-about library:
+shogi is a traditional and popular board game in Japan, kind of a catagory of chess.
 
-<h3>Interface:
-  
-  .shogi() to start a new game!
-  
-	.isUnderOte() check if current chesser is under Ote (checked)
-		return True if yes  
+this is a python shogi library that made for fun. (there is a more official one in github)
+
+has not fully tested yet, but work well most of the time.
+
+only test under Python 3.7, Windows 10, but should be work on Python 3.6 and other OS that can run Python. 
+
+<h2>about library:</h2>
+
+<h3>Interface:</h3>
+	
+	.shogi() to start a new game! (get a shogi object to start)
+	
+	.isUnderOte() check if current chesser is under Ote (checked) return True if yes
     
 	.getPML()
 		fill possibleMoveList by all possible move, if False, means chesser is 詰み (game over)
@@ -51,6 +54,6 @@ about library:
 
 there is a obvious need of improvment in actual implement, but at least it work.
 
-about test:
+<h3>about test:</h3>
 
 	test.py is a small test that two chesser will randomly throw possible step till end
