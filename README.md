@@ -3,10 +3,9 @@ shogi is a traditional and popular board game in Japan, kind of a catagory of ch
 	this is a python shogi library that made for fun. (there is a more official one in github)
 	has not fully tested yet, but work well most of the time.
 	only test under Python 3.7, Windows 10, but should be work on Python 3.6 and other OS that can run Python. 
-
 about library:
 
-interface:
+<h3>Interface:
   
   .shogi() to start a new game!
   
