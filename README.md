@@ -54,6 +54,10 @@ only test under Python 3.7, Windows 10, but should be work on Python 3.6 and oth
 
 there is a obvious need of improvment in actual implement, but at least it work.
 
-<h3>about test:</h3>
+<h3>about test.py:</h3>
 
 	test.py is a small test that two chesser will randomly throw possible step till end
+
+<h3>about manplay.py:</h3>
+
+	an easy example of a shogi game
