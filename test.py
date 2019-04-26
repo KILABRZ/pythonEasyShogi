@@ -1,7 +1,6 @@
 import shogi
 import random
 import time
-import simpleBot
 newGame = shogi.shogi()
 while newGame.round <= 1600:
 	print('Round = ', newGame.round)
