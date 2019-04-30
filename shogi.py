@@ -1,74 +1,8 @@
-initialBoard = {
-	(1, 1):('先手', '香'), (1, 2):('', '  '), (1, 3):('先手', '步'), (1, 4):('', '  '), (1, 5):('', '  '), 
-	(2, 1):('先手', '桂'), (2, 2):('先手', '角'), (2, 3):('先手', '步'),  (2, 4):('', '  '), (2, 5):('', '  '),	
-	(3, 1):('先手', '銀'), (3, 2):('', '  '), (3, 3):('先手', '步'), (3, 4):('', '  '), (3, 5):('', '  '),
-	(4, 1):('先手', '金'), (4, 2):('', '  '), (4, 3):('先手', '步'), (4, 4):('', '  '), (4, 5):('', '  '),  
-	(5, 1):('先手', '王'), (5, 2):('', '  '),  (5, 3):('先手', '步'), (5, 4):('', '  '), (5, 5):('', '  '), 
-	(6, 1):('先手', '金'), (6, 2):('', '  '), (6, 3):('先手', '步'), (6, 4):('', '  '), (6, 5):('', '  '), 	
-	(7, 1):('先手', '銀'), (7, 2):('', '  '), (7, 3):('先手', '步'), (7, 4):('', '  '), (7, 5):('', '  '), 
-	(8, 1):('先手', '桂'), (8, 2):('先手', '飛'), (8, 3):('先手', '步'), (8, 4):('', '  '), (8, 5):('', '  '), 
-	(9, 1):('先手', '香'), (9, 2):('', '  '), (9, 3):('先手', '步'), (9, 4):('', '  '), (9, 5):('', '  '), 
-	(1, 6):('', '  '), (1, 7):('後手', '步'), (1, 8):('', '  '), (1, 9):('後手', '香'),
-	(2, 6):('', '  '), (2, 7):('後手', '步'), (2, 8):('後手', '飛'), (2, 9):('後手', '桂'),
-	(3, 6):('', '  '), (3, 7):('後手', '步'), (3, 8):('', '  '), (3, 9):('後手', '銀'),
-	(4, 6):('', '  '), (4, 7):('後手', '步'), (4, 8):('', '  '), (4, 9):('後手', '金'),
-	(5, 6):('', '  '), (5, 7):('後手', '步'), (5, 8):('', '  '), (5, 9):('後手', '王'),
-	(6, 6):('', '  '), (6, 7):('後手', '步'), (6, 8):('', '  '), (6, 9):('後手', '金'),
-	(7, 6):('', '  '), (7, 7):('後手', '步'), (7, 8):('', '  '), (7, 9):('後手', '銀'),
-	(8, 6):('', '  '), (8, 7):('後手', '步'), (8, 8):('後手', '角'), (8, 9):('後手', '桂'),
-	(9, 6):('', '  '), (9, 7):('後手', '步'), (9, 8):('', '  '), (9, 9):('後手', '香'),
-	(0, 0):list(),
-	(10, 0):list()
-}
-
-narigoma = {
-	'步':'と',
-	'香':'杏',
-	'桂':'圭',
-	'銀':'全',
-	'角':'馬',
-	'飛':'竜'
-}
-
-denarigoma = {
-	'と':'步',
-	'杏':'香',
-	'圭':'桂',
-	'全':'銀',
-	'馬':'角',
-	'竜':'飛',
-	'步':'步',
-	'桂':'桂',
-	'香':'香',
-	'銀':'銀',
-	'金':'金',
-	'飛':'飛',
-	'角':'角',
-	'王':'王'
-}
-
-gomaOrder = {
-	'步':0,
-	'香':1,
-	'桂':2,
-	'銀':3,
-	'金':4,
-	'角':5,
-	'飛':6
-}
-
-sentegomaT = (0, 0)
-gotegomaT = (10, 0)
+from board import *    	# board method
+from goma import *		# goma method
 
 fourdirection = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 fourdignodirection = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-
-def legalPos(suji, dan):
-	if suji < 1 or suji > 9 or dan < 1 or dan > 9:
-		return False
-	return True
-
-
 class shogi:
 	def __init__(self):
 		self.board = initialBoard
@@ -78,6 +12,7 @@ class shogi:
 		self.round = 1
 		self.cameraAngle = '先手'
 		self.stimulateFlag = False
+
 	def isUnderOte(self):
 		chesserDierction = 0
 		if self.chesser == '後手':
@@ -93,38 +28,38 @@ class shogi:
 					dan = j
 					break
 		another = '後手' if self.chesser == '先手' else '先手'
-		if legalPos(suji-1, dan+2*chesserDierction):
+		if legalPos((suji-1, dan+2*chesserDierction)):
 			if self.board[(suji-1, dan+2*chesserDierction)] == (another, '桂'):
 				return True
-		if legalPos(suji+1, dan+2*chesserDierction):
+		if legalPos((suji+1, dan+2*chesserDierction)):
 			if self.board[(suji+1, dan+2*chesserDierction)] == (another, '桂'):
 				return True
-		if legalPos(suji, dan+1*chesserDierction):
+		if legalPos((suji, dan+1*chesserDierction)):
 			if self.board[(suji, dan+1*chesserDierction)] in ((another, '步'), (another, '金'), (another, '銀'), (another, '圭'), (another, '杏'), (another, '全'), (another, 'と')):
 				return True
-		if legalPos(suji-1, dan+1*chesserDierction):
+		if legalPos((suji-1, dan+1*chesserDierction)):
 			if self.board[(suji-1, dan+1*chesserDierction)] in ((another, '金'), (another, '銀'), (another, '圭'), (another, '杏'), (another, '全'), (another, 'と')):
 				return True
-		if legalPos(suji+1, dan+1*chesserDierction):
+		if legalPos((suji+1, dan+1*chesserDierction)):
 			if self.board[(suji+1, dan+1*chesserDierction)] in ((another, '金'), (another, '銀'), (another, '圭'), (another, '杏'), (another, '全'), (another, 'と')):
 				return True
-		if legalPos(suji-1, dan):
+		if legalPos((suji-1, dan)):
 			if self.board[(suji-1, dan)] in ((another, '金'), (another, '圭'), (another, '杏'), (another, '全'), (another, 'と')):
 				return True
-		if legalPos(suji+1, dan):
+		if legalPos((suji+1, dan)):
 			if self.board[(suji+1, dan)] in ((another, '金'), (another, '圭'), (another, '杏'), (another, '全'), (another, 'と')):
 				return True
-		if legalPos(suji-1, dan-1*chesserDierction):
+		if legalPos((suji-1, dan-1*chesserDierction)):
 			if self.board[(suji-1, dan-1*chesserDierction)] == (another, '銀'):
 				return True
-		if legalPos(suji+1, dan-1*chesserDierction):
+		if legalPos((suji+1, dan-1*chesserDierction)):
 			if self.board[(suji+1, dan-1*chesserDierction)] == (another, '銀'):
 				return True
-		if legalPos(suji, dan-1*chesserDierction):
+		if legalPos((suji, dan-1*chesserDierction)):
 			if self.board[(suji, dan-1*chesserDierction)] in ((another, '金'), (another, '圭'), (another, '杏'), (another, '全'), (another, 'と')):
 				return True
 		for i in range(1, 10, 1):
-			if not legalPos(suji, dan+i*chesserDierction): break
+			if not legalPos((suji, dan+i*chesserDierction)): break
 			if self.board[(suji, dan+i*chesserDierction)] == (another, '香'): return True
 			if self.board[(suji, dan+i*chesserDierction)][0] != '': break
 
@@ -132,7 +67,7 @@ class shogi:
 			for i in range(1, 10, 1):
 				checksuji = suji+d[0]*i
 				checkdan = dan+d[1]*i
-				if not legalPos(checksuji, checkdan): break
+				if not legalPos((checksuji, checkdan)): break
 				if self.board[(checksuji, checkdan)] == (another, '飛'): return True
 				if self.board[(checksuji, checkdan)] == (another, '竜'): return True
 				if i == 1:
@@ -143,7 +78,7 @@ class shogi:
 			for i in range(1, 10, 1):
 				checksuji = suji+d[0]*i
 				checkdan = dan+d[1]*i
-				if not legalPos(checksuji, checkdan): break
+				if not legalPos((checksuji, checkdan)): break
 				if self.board[(checksuji, checkdan)][0] == self.chesser: break
 				if self.board[(checksuji, checkdan)] == (another, '角'): return True
 				if self.board[(checksuji, checkdan)] == (another, '馬'): return True
@@ -152,12 +87,13 @@ class shogi:
 					if self.board[(checksuji, checkdan)] == (another, '王'): return True
 				if self.board[(checksuji, checkdan)][0] != '': break
 		return False
+
 	def isLegalMove(self, move):
 		underOteFlag = self.isUnderOte()
 		prePiecePos, newPiecePos, nari = move
 		if prePiecePos[0] < 0 or prePiecePos[0] > 10 or prePiecePos[1] < 0 or prePiecePos[1] > 10:
 			return False
-		if not legalPos(newPiecePos[0], newPiecePos[1]):
+		if not legalPos(newPiecePos):
 			return False
 		if self.board[newPiecePos][0] == self.chesser:
 			return False
@@ -257,20 +193,6 @@ class shogi:
 			self.board[newPiecePos] = tmpPieceNew
 			self.board[prePiecePos] = tmpPiecePre
 		return True
-
-
-	def nariIki(self, dan):
-		if self.chesser == '先手':
-			if dan >= 7:
-				return True
-			else:
-				return False
-		else:
-			if dan <= 3:
-				return True
-			else:
-				return False
-	
 	def getPML(self):
 		underOteFlag = self.isUnderOte()
 		if not self.stimulateFlag:
@@ -280,254 +202,32 @@ class shogi:
 			chesserDierction = -1
 		else:
 			chesserDierction = 1
-		if self.chesser == '先手':
-			pregoma = ''
-			for mochigoma in self.board[sentegomaT]:
-				if pregoma == mochigoma:
-					continue
-				else:
-					pregoma = mochigoma
-				for suji in range(1, 10, 1):
-					for dan in range(1, 10, 1):
-						if self.board[(suji, dan)][0] == '':
-							move = ((0, self.board[sentegomaT].index(mochigoma)), (suji, dan), False)
-							if self.isLegalMove(move):
-								self.possibleMoveList.append(move)
-								if self.stimulateFlag: return True
-		if self.chesser == '後手':
-			pregoma = ''
-			for mochigoma in self.board[gotegomaT]:
-				if pregoma == mochigoma:
-					continue
-				else:
-					pregoma = mochigoma
-				for suji in range(1, 10, 1):
-					for dan in range(1, 10, 1):
-						if self.board[(suji, dan)][0] == '':
-							move = ((10, self.board[gotegomaT].index(mochigoma)), (suji, dan), False)
-							if self.isLegalMove(move):
-								self.possibleMoveList.append(move)
-								if self.stimulateFlag: return True
-		for key in self.board.keys():
-			suji, dan = key	
-			if self.board[key] == (self.chesser, '步'):
-				move = ((suji, dan), (suji, dan+1*chesserDierction), False)
+
+		gomaT = sentegomaT if self.chesser == '先手' else gotegomaT		
+		pregoma = ''
+		for mochigoma in self.board[gomaT]:
+			if pregoma == mochigoma:
+				continue
+			else:
+				pregoma = mochigoma
+			for suji in range(1, 10, 1):
+				for dan in range(1, 10, 1):
+					if self.board[(suji, dan)][0] == '':
+						move = ((gomaT[0], self.board[gomaT].index(mochigoma)), (suji, dan), False)
+						if self.isLegalMove(move):
+							self.possibleMoveList.append(move)
+							if self.stimulateFlag: return True
+
+		for pos in self.board.keys():
+			suji, dan = pos
+			returnvalue = getGomaPossibleMove(pos, self.board, self.board[pos])
+			if returnvalue is False:
+				continue
+			for move in returnvalue:
 				if self.isLegalMove(move):
 					self.possibleMoveList.append(move)
 					if self.stimulateFlag: return True
-				if self.nariIki(dan+1*chesserDierction):
-					move = ((suji, dan), (suji, dan+1*chesserDierction), True)
-					if self.isLegalMove(move):
-						self.possibleMoveList.append(move)
-						if self.stimulateFlag: return True
 
-						
-			if self.board[key] == (self.chesser, '香'):
-				for i in range(1, 9, 1):
-					if not legalPos(suji, dan+i*chesserDierction):
-						break
-					move = ((suji, dan), (suji, dan+i*chesserDierction), False)
-					if self.isLegalMove(move): 
-						self.possibleMoveList.append(move)
-						if self.stimulateFlag: return True
-					if self.nariIki(dan+i*chesserDierction):
-						move = ((suji, dan), (suji, dan+i*chesserDierction), True)
-						if self.isLegalMove(move): 
-							self.possibleMoveList.append(move)
-							if self.stimulateFlag: return True
-					if self.board[(suji, dan+i*chesserDierction)][0] != '':
-						break
-
-
-			if self.board[key] == (self.chesser, '桂'):
-				moves = [((suji, dan), (suji-1, dan+2*chesserDierction), False),
-						((suji, dan), (suji+1, dan+2*chesserDierction), False),]
-				for move in moves:
-					if self.isLegalMove(move):
-						self.possibleMoveList.append(move)
-						if self.stimulateFlag: return True
-				if self.nariIki(dan+2*chesserDierction):
-					moves = [((suji, dan), (suji-1, dan+2*chesserDierction), True),
-						((suji, dan), (suji+1, dan+2*chesserDierction), True),]
-					for move in moves:
-						if self.isLegalMove(move):
-							self.possibleMoveList.append(move)
-							if self.stimulateFlag: return True
-
-
-			if self.board[key] == (self.chesser, '銀'):
-				moves = [((suji, dan), (suji-1, dan+1*chesserDierction), False),
-						((suji, dan), (suji, dan+1*chesserDierction), False),
-						((suji, dan), (suji+1, dan+1*chesserDierction), False),
-						((suji, dan), (suji-1, dan-1*chesserDierction), False),
-						((suji, dan), (suji+1, dan-1*chesserDierction), False)]
-				for move in moves:
-					if self.isLegalMove(move):
-						self.possibleMoveList.append(move)
-						if self.stimulateFlag: return True
-				moves = [((suji, dan), (suji-1, dan+1*chesserDierction), True),
-						((suji, dan), (suji, dan+1*chesserDierction), True),
-						((suji, dan), (suji+1, dan+1*chesserDierction), True),
-						((suji, dan), (suji-1, dan-1*chesserDierction), True),
-						((suji, dan), (suji+1, dan-1*chesserDierction), True)]
-				for move in moves:
-					if self.nariIki(move[1][1]) or self.nariIki(dan):
-						if self.isLegalMove(move):
-							self.possibleMoveList.append(move)
-							if self.stimulateFlag: return True
-			if self.board[key] in ((self.chesser, '金'), (self.chesser, '全'), (self.chesser, '圭'), (self.chesser, '杏'), (self.chesser, 'と')):
-				moves = [((suji, dan), (suji-1, dan+1*chesserDierction), False),
-						((suji, dan), (suji, dan+1*chesserDierction), False),
-						((suji, dan), (suji+1, dan+1*chesserDierction), False),
-						((suji, dan), (suji-1, dan), False),
-						((suji, dan), (suji+1, dan), False),
-						((suji, dan), (suji, dan-1*chesserDierction), False)]
-				for move in moves:
-					if self.isLegalMove(move):
-						self.possibleMoveList.append(move)
-						if self.stimulateFlag: return True
-			if self.board[key] == (self.chesser, '王'):
-				moves = [((suji, dan), (suji-1, dan+1*chesserDierction), False),
-						((suji, dan), (suji, dan+1*chesserDierction), False),
-						((suji, dan), (suji+1, dan+1*chesserDierction), False),
-						((suji, dan), (suji+1, dan), False),
-						((suji, dan), (suji-1, dan), False),
-						((suji, dan), (suji+1, dan-1*chesserDierction), False),
-						((suji, dan), (suji, dan-1*chesserDierction), False),
-						((suji, dan), (suji-1, dan-1*chesserDierction), False)]
-				for move in moves:
-					if self.isLegalMove(move):
-						self.possibleMoveList.append(move)
-						if self.stimulateFlag: return True
-			if self.board[key] == (self.chesser, '角') or self.board[key] == (self.chesser, '馬'):
-				A, B, C, D = (True, True, True, True)
-				if self.board[key] == (self.chesser, '馬'):
-					moves = [((suji, dan), (suji+1, dan), False),
-							((suji, dan), (suji, dan-1), False),
-							((suji, dan), (suji-1, dan), False),
-							((suji, dan), (suji, dan+1), False)]
-					for move in moves:
-						if self.isLegalMove(move): 
-							self.possibleMoveList.append(move)
-							if self.stimulateFlag: return True
-				for i in range(1, 9, 1):
-					if A:
-						if suji+i <= 9 and dan+i <= 9:
-							moveA = ((suji, dan), (suji+i, dan+i), False)
-							if self.isLegalMove(moveA): 
-								self.possibleMoveList.append(moveA)
-								if self.stimulateFlag: return True
-							if (self.nariIki(dan) or self.nariIki(dan+i)) and self.board[key] == (self.chesser, '角'):
-								moveA = ((suji, dan), (suji+i, dan+i), True)
-								if self.isLegalMove(moveA): 
-									self.possibleMoveList.append(moveA)
-									if self.stimulateFlag: return True
-							if self.board[(suji+i, dan+i)][0] != '':	
-								A = False
-					if B:
-						if suji-i >= 1 and dan+i <= 9: 
-							moveB = ((suji, dan), (suji-i, dan+i), False)
-							if self.isLegalMove(moveB): 
-								self.possibleMoveList.append(moveB)
-								if self.stimulateFlag: return True
-							if ( self.nariIki(dan)or self.nariIki(dan+i)) and self.board[key] == (self.chesser, '角'):
-								moveB = ((suji, dan), (suji-i, dan+i), True)
-								if self.isLegalMove(moveB): 
-									self.possibleMoveList.append(moveB)
-									if self.stimulateFlag: return True
-							if self.board[(suji-i, dan+i)][0] != '':
-								B = False
-					if C:
-						if suji+i <= 9 and dan-i >= 1: 
-							moveC = ((suji, dan), (suji+i, dan-i), False)
-							if self.isLegalMove(moveC): 
-								self.possibleMoveList.append(moveC)
-								if self.stimulateFlag: return True
-							if (self.nariIki(dan-i) or self.nariIki(dan)) and self.board[key] == (self.chesser, '角'):
-								moveC = ((suji, dan), (suji+i, dan-i), True)
-								if self.isLegalMove(moveC): 
-									self.possibleMoveList.append(moveC)
-									if self.stimulateFlag: return True
-							if self.board[(suji+i, dan-i)][0] != '':
-								C = False
-					if D:
-						if suji-i >= 1 and dan-i >= 1:
-							moveD = ((suji, dan), (suji-i, dan-i), False)
-							if self.isLegalMove(moveD): 
-								self.possibleMoveList.append(moveD)
-								if self.stimulateFlag: return True
-							if (self.nariIki(dan-i) or self.nariIki(dan)) and self.board[key] == (self.chesser, '角'):
-								moveD = ((suji, dan), (suji-i, dan-i), True)
-								if self.isLegalMove(moveD): 
-									self.possibleMoveList.append(moveD)
-									if self.stimulateFlag: return True
-							if self.board[(suji-i, dan-i)][0] != '':
-								D = False
-
-			if self.board[key] == (self.chesser, '飛') or self.board[key] == (self.chesser, '竜'):
-				A, B, C, D = (True, True, True, True)
-				if self.board[key] == (self.chesser, '竜'):
-					moves = [((suji, dan), (suji+1, dan+1), False),
-							((suji, dan), (suji+1, dan-1), False),
-							((suji, dan), (suji-1, dan+1), False),
-							((suji, dan), (suji-1, dan-1), False)]
-					for move in moves:
-						if self.isLegalMove(move): 
-							self.possibleMoveList.append(move)
-							if self.stimulateFlag: return True
-				for i in range(1, 9, 1):
-					if A:
-						if suji+i <= 9:
-							moveA = ((suji, dan), (suji+i, dan), False)
-							if self.isLegalMove(moveA): 
-								self.possibleMoveList.append(moveA)
-								if self.stimulateFlag: return True
-							if self.nariIki(dan) and self.board[key] == (self.chesser, '飛'):
-								moveA = ((suji, dan), (suji+i, dan), True)
-								if self.isLegalMove(moveA): 
-									self.possibleMoveList.append(moveA)
-									if self.stimulateFlag: return True
-							if self.board[(suji+i, dan)][0] != '':	
-								A = False
-					if B:
-						if suji-i >= 1: 
-							moveB = ((suji, dan), (suji-i, dan), False)
-							if self.isLegalMove(moveB): 
-								self.possibleMoveList.append(moveB)
-								if self.stimulateFlag: return True
-							if self.nariIki(dan) and self.board[key] == (self.chesser, '飛'):
-								moveB = ((suji, dan), (suji-i, dan), True)
-								if self.isLegalMove(moveB): 
-									self.possibleMoveList.append(moveB)
-									if self.stimulateFlag: return True
-							if self.board[(suji-i, dan)][0] != '':
-								B = False
-					if C:
-						if dan+i <= 9: 
-							moveC = ((suji, dan), (suji, dan+i), False)
-							if self.isLegalMove(moveC): 
-								self.possibleMoveList.append(moveC)
-								if self.stimulateFlag: return True
-							if self.nariIki(dan+i) and self.board[key] == (self.chesser, '飛'):
-								moveC = ((suji, dan), (suji, dan+i), True)
-								if self.isLegalMove(moveC): 
-									self.possibleMoveList.append(moveC)
-									if self.stimulateFlag: return True
-							if self.board[(suji, dan+i)][0] != '':
-								C = False
-					if D:
-						if dan-i >= 1:
-							moveD = ((suji, dan), (suji, dan-i), False)
-							if self.isLegalMove(moveD): 
-								self.possibleMoveList.append(moveD)
-								if self.stimulateFlag: return True
-							if self.nariIki(dan-i) and self.board[key] == (self.chesser, '飛'):
-								moveD = ((suji, dan), (suji, dan-i), True)
-								if self.isLegalMove(moveD): 
-									self.possibleMoveList.append(moveD)
-									if self.stimulateFlag: return True
-							if self.board[(suji, dan-i)][0] != '':
-								D = False
 		if len(self.possibleMoveList) == 0:
 			if not self.stimulateFlag:
 				self.moveRecorder.append(str(self.round)+'手まで、'+self.chesser+'詰み\n')
@@ -553,14 +253,14 @@ class shogi:
 
 		else:	
 			if self.board[newPiecePos][0] == '先手':
-				self.board[gotegomaT].append(('後手', denarigoma[self.board[newPiecePos][1]]))
+				self.board[gotegomaT].append(('後手', gomaDePromote[self.board[newPiecePos][1]]))
 				self.board[gotegomaT].sort(key=lambda val: gomaOrder[val[1]])
 			if self.board[newPiecePos][0] == '後手':
-				self.board[sentegomaT].append(('先手', denarigoma[self.board[newPiecePos][1]]))
+				self.board[sentegomaT].append(('先手', gomaDePromote[self.board[newPiecePos][1]]))
 				self.board[sentegomaT].sort(key=lambda val: gomaOrder[val[1]])
 
 			if nari is True:
-				self.board[newPiecePos] = (self.board[prePiecePos][0], narigoma[self.board[prePiecePos][1]])
+				self.board[newPiecePos] = (self.board[prePiecePos][0], gomaPromote[self.board[prePiecePos][1]])
 			else:
 				self.board[newPiecePos] = self.board[prePiecePos]
 			self.board[prePiecePos] = ('', '  ')
