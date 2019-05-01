@@ -117,7 +117,7 @@ class shogi:
 				self.chesser = '後手'
 				if self.isUnderOte():
 					self.stimulateFlag = True
-					if self.getPML() is False:
+					if self.getPML() == False:
 						self.chesser = '先手'
 						self.board[newPiecePos] = ('', '  ')
 						self.stimulateFlag = False
@@ -152,7 +152,7 @@ class shogi:
 				self.chesser = '先手'
 				if self.isUnderOte():
 					self.stimulateFlag = True
-					if self.getPML() is False:
+					if self.getPML() == False:
 						self.chesser = '後手'
 						self.board[newPiecePos] = ('', '  ')
 						self.stimulateFlag = False
@@ -197,11 +197,8 @@ class shogi:
 		underOteFlag = self.isUnderOte()
 		if not self.stimulateFlag:
 			self.possibleMoveList.clear()
-		chesserDierction = 0
-		if self.chesser == '後手':
-			chesserDierction = -1
-		else:
-			chesserDierction = 1
+
+		chesserDierction = -1 if self.chesser == '後手' else 1
 
 		gomaT = sentegomaT if self.chesser == '先手' else gotegomaT		
 		pregoma = ''
@@ -216,7 +213,8 @@ class shogi:
 						move = ((gomaT[0], self.board[gomaT].index(mochigoma)), (suji, dan), False)
 						if self.isLegalMove(move):
 							self.possibleMoveList.append(move)
-							if self.stimulateFlag: return True
+							if self.stimulateFlag: 
+								return True
 
 		for pos in self.board.keys():
 			suji, dan = pos
@@ -226,11 +224,12 @@ class shogi:
 			for move in returnvalue:
 				if self.isLegalMove(move):
 					self.possibleMoveList.append(move)
-					if self.stimulateFlag: return True
-
+					if self.stimulateFlag: 
+						return True
+		if self.stimulateFlag:
+			return False
 		if len(self.possibleMoveList) == 0:
-			if not self.stimulateFlag:
-				self.moveRecorder.append(str(self.round)+'手まで、'+self.chesser+'詰み\n')
+			self.moveRecorder.append(str(self.round)+'手まで、'+self.chesser+'詰み\n')
 			return False
 		else:
 			return True

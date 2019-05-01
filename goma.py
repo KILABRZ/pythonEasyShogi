@@ -136,6 +136,3 @@ def getGomaPossibleMove(pos, board, goma):
 			if board[newpos][0] != '':
 				break
 	return possiblemove
-
-
-

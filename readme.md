@@ -7,10 +7,9 @@ has not fully tested yet, but work well most of the time.
 
 only test under Python 3.7, Windows 10, but should be work on Python 3.6 and other OS that can run Python. 
 
-<h2>about shogi.py:</h2>
-main frame of this library
+<h2>about library:</h2>
 
-<h3>interface:</h3>
+<h3>Interface:</h3>
 	
 	.shogi() to start a new game! (get a shogi object to start)
 	
@@ -57,19 +56,14 @@ there is a obvious need of improvment in actual implement, but at least it work.
 
 <h3>about test.py:</h3>
 
-	a small test that two chesser will randomly throw possible step till end
+	test.py is a small test that two chesser will randomly throw possible step till end
 
 <h3>about manplay.py:</h3>
 
 	an easy example of a shogi game
 
-<h3>about goma.py:</h3>
+<h3>about guitest.py:</h3>
 
-	new add at 19/4/30, to simplify shogi.py
-	define how goma move, and some goma's method
-
-<h3>about board.py:</h3>
-	
-	new add at 19/4/30, to simplify shogi.py
-	define initial board, and some board about name.
+	test.py with a GUI, images use font from http://modi.jpn.org/font_mushin.php
+	use tkinter to realize that.
 
