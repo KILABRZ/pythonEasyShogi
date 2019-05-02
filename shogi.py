@@ -12,21 +12,9 @@ class shogi:
 		self.round = 1
 		self.cameraAngle = '先手'
 		self.stimulateFlag = False
-
-	def isUnderOte(self):
-		chesserDierction = 0
-		if self.chesser == '後手':
-			chesserDierction = -1
-		else:
-			chesserDierction = 1
-		suji = 1
-		dan = 1
-		for i in range(1, 10):
-			for j in range(1, 10):
-				if self.board[(i, j)] == (self.chesser, '王'):
-					suji = i
-					dan = j
-					break
+	def posIsUnderAttack(self, pos):
+		suji, dan = pos
+		chesserDierction = -1 if self.chesser == '後手' else 1
 		another = '後手' if self.chesser == '先手' else '先手'
 		if legalPos((suji-1, dan+2*chesserDierction)):
 			if self.board[(suji-1, dan+2*chesserDierction)] == (another, '桂'):
@@ -87,6 +75,80 @@ class shogi:
 					if self.board[(checksuji, checkdan)] == (another, '王'): return True
 				if self.board[(checksuji, checkdan)][0] != '': break
 		return False
+	def posIsUnderDefense(self, pos):
+		suji, dan = pos
+		chesserDierction = 1 if self.chesser == '後手' else -1
+		if legalPos((suji-1, dan+2*chesserDierction)):
+			if self.board[(suji-1, dan+2*chesserDierction)] == (self.chesser, '桂'):
+				return True
+		if legalPos((suji+1, dan+2*chesserDierction)):
+			if self.board[(suji+1, dan+2*chesserDierction)] == (self.chesser, '桂'):
+				return True
+		if legalPos((suji, dan+1*chesserDierction)):
+			if self.board[(suji, dan+1*chesserDierction)] in ((self.chesser, '步'), (self.chesser, '金'), (self.chesser, '銀'), (self.chesser, '圭'), (self.chesser, '杏'), (self.chesser, '全'), (self.chesser, 'と')):
+				return True
+		if legalPos((suji-1, dan+1*chesserDierction)):
+			if self.board[(suji-1, dan+1*chesserDierction)] in ((self.chesser, '金'), (self.chesser, '銀'), (self.chesser, '圭'), (self.chesser, '杏'), (self.chesser, '全'), (self.chesser, 'と')):
+				return True
+		if legalPos((suji+1, dan+1*chesserDierction)):
+			if self.board[(suji+1, dan+1*chesserDierction)] in ((self.chesser, '金'), (self.chesser, '銀'), (self.chesser, '圭'), (self.chesser, '杏'), (self.chesser, '全'), (self.chesser, 'と')):
+				return True
+		if legalPos((suji-1, dan)):
+			if self.board[(suji-1, dan)] in ((self.chesser, '金'), (self.chesser, '圭'), (self.chesser, '杏'), (self.chesser, '全'), (self.chesser, 'と')):
+				return True
+		if legalPos((suji+1, dan)):
+			if self.board[(suji+1, dan)] in ((self.chesser, '金'), (self.chesser, '圭'), (self.chesser, '杏'), (self.chesser, '全'), (self.chesser, 'と')):
+				return True
+		if legalPos((suji-1, dan-1*chesserDierction)):
+			if self.board[(suji-1, dan-1*chesserDierction)] == (self.chesser, '銀'):
+				return True
+		if legalPos((suji+1, dan-1*chesserDierction)):
+			if self.board[(suji+1, dan-1*chesserDierction)] == (self.chesser, '銀'):
+				return True
+		if legalPos((suji, dan-1*chesserDierction)):
+			if self.board[(suji, dan-1*chesserDierction)] in ((self.chesser, '金'), (self.chesser, '圭'), (self.chesser, '杏'), (self.chesser, '全'), (self.chesser, 'と')):
+				return True
+		for i in range(1, 10, 1):
+			if not legalPos((suji, dan+i*chesserDierction)): break
+			if self.board[(suji, dan+i*chesserDierction)] == (self.chesser, '香'): return True
+			if self.board[(suji, dan+i*chesserDierction)][0] != '': break
+
+		for d in fourdirection:
+			for i in range(1, 10, 1):
+				checksuji = suji+d[0]*i
+				checkdan = dan+d[1]*i
+				if not legalPos((checksuji, checkdan)): break
+				if self.board[(checksuji, checkdan)] == (self.chesser, '飛'): return True
+				if self.board[(checksuji, checkdan)] == (self.chesser, '竜'): return True
+				if i == 1:
+					if self.board[(checksuji, checkdan)] == (self.chesser, '馬'): return True
+					if self.board[(checksuji, checkdan)] == (self.chesser, '王'): return True
+				if self.board[(checksuji, checkdan)][0] != '': break
+		for d in fourdignodirection:
+			for i in range(1, 10, 1):
+				checksuji = suji+d[0]*i
+				checkdan = dan+d[1]*i
+				if not legalPos((checksuji, checkdan)): break
+				if self.board[(checksuji, checkdan)][0] == self.chesser: break
+				if self.board[(checksuji, checkdan)] == (self.chesser, '角'): return True
+				if self.board[(checksuji, checkdan)] == (self.chesser, '馬'): return True
+				if i == 1:
+					if self.board[(checksuji, checkdan)] == (self.chesser, '竜'): return True
+					if self.board[(checksuji, checkdan)] == (self.chesser, '王'): return True
+				if self.board[(checksuji, checkdan)][0] != '': break
+		return False
+	def isUnderOte(self):
+		suji = 1
+		dan = 1
+		for i in range(1, 10):
+			for j in range(1, 10):
+				if self.board[(i, j)] == (self.chesser, '王'):
+					suji = i
+					dan = j
+					break
+		return self.posIsUnderAttack((suji, dan))
+
+	
 
 	def isLegalMove(self, move):
 		underOteFlag = self.isUnderOte()
@@ -311,7 +373,16 @@ class shogi:
 		for goma in self.board[gotegomaT]:
 			print(goma[1], end=',')
 		print('')
-
+	def printDefenseState(self):
+		for dan in range(1, 10):
+			for suji in range(9, 0, -1):
+				pos = (suji, dan)
+				if self.posIsUnderDefense(pos):
+					print('x', end='')
+				else:
+					print('.', end='')
+			print('')
+		print('')
 		
 #	def revertMove(self):		todo function
 
