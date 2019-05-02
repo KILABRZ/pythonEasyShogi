@@ -8,6 +8,7 @@ has not fully tested yet, but work well most of the time.
 only test under Python 3.7, Windows 10, but should be work on Python 3.6 and other OS that can run Python. 
 
 <h2>about library:</h2>
+all library has 3 main file, shogi.py, goma.py, and board.py
 
 <h3>Interface:</h3>
 	
@@ -52,18 +53,16 @@ only test under Python 3.7, Windows 10, but should be work on Python 3.6 and oth
 	.chesser
 		get current chesser, has '先手' and '後手'
 
-there is a obvious need of improvment in actual implement, but at least it work.
+and there is other trival method that can be used to get some information about board.
+in practice/ there are some example of using this shogi library
 
-<h3>about test.py:</h3>
-
-	test.py is a small test that two chesser will randomly throw possible step till end
-
-<h3>about manplay.py:</h3>
-
-	an easy example of a shogi game
-
+<h3>about simpleBot.py:</h3>
+	construct a simpleBot by situation valueing, and scalable tree searching.
+	
 <h3>about guitest.py:</h3>
-
 	test.py with a GUI, images use font from http://modi.jpn.org/font_mushin.php
 	use tkinter to realize that.
+	
+<h3>about verseWeakBot.py:</h3>
+	a shogi game implement to play against a weak bot player
 
