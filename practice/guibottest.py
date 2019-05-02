@@ -1,10 +1,12 @@
 import tkinter as tk
-from PIL import Image, ImageTk
+from gomaImage import *
 import shogi
 import random
 import time
-
+import simpleBot
+import gc
 root = tk.Tk()
+
 
 W = 700
 H = 700
@@ -15,10 +17,7 @@ gomaTPlace2 = 600
 GRID = 50
 
 mainbase = tk.Canvas(root, width=W, height=H)
-maingame = shogi.shogi()
-maingame.cameraAngle = '後手'
 
-from gomaImage import *
 def getgrid(x, y):
 	x -= DW
 	x = x//GRID
@@ -49,69 +48,6 @@ def grid2suji(i, j, temae):
 
 def getxy(i, j):
 	return (DW+i*GRID, DH+j*GRID)
-
-gomaToImage_angleSente = {
-	('先手', '步'):fuImage,
-	('先手', '香'):kyouImage,
-	('先手', '桂'):keImage,
-	('先手', '銀'):ginImage,
-	('先手', '金'):kinImage,
-	('先手', '飛'):hishaImage,
-	('先手', '角'):kakuImage,
-	('先手', '王'):ooImage,
-	('先手', 'と'):toImage,
-	('先手', '杏'):narikyouImage,
-	('先手', '圭'):narikeImage,
-	('先手', '全'):nariginImage,
-	('先手', '竜'):ryuuImage,
-	('先手', '馬'):umaImage,
-	('後手', '步'):vfuImage,
-	('後手', '香'):vkyouImage,
-	('後手', '桂'):vkeImage,
-	('後手', '銀'):vginImage,
-	('後手', '金'):vkinImage,
-	('後手', '飛'):vhishaImage,
-	('後手', '角'):vkakuImage,
-	('後手', '王'):vgyouImage,
-	('後手', 'と'):vtoImage,
-	('後手', '杏'):vnarikyouImage,
-	('後手', '圭'):vnarikeImage,
-	('後手', '全'):vnariginImage,
-	('後手', '竜'):vryuuImage,
-	('後手', '馬'):vumaImage,
-	('', '  '):zeroImage
-}
-gomaToImage_angleGote = {
-	('後手', '步'):fuImage,
-	('後手', '香'):kyouImage,
-	('後手', '桂'):keImage,
-	('後手', '銀'):ginImage,
-	('後手', '金'):kinImage,
-	('後手', '飛'):hishaImage,
-	('後手', '角'):kakuImage,
-	('後手', '王'):gyouImage,
-	('後手', 'と'):toImage,
-	('後手', '杏'):narikyouImage,
-	('後手', '圭'):narikeImage,
-	('後手', '全'):nariginImage,
-	('後手', '竜'):ryuuImage,
-	('後手', '馬'):umaImage,
-	('先手', '步'):vfuImage,
-	('先手', '香'):vkyouImage,
-	('先手', '桂'):vkeImage,
-	('先手', '銀'):vginImage,
-	('先手', '金'):vkinImage,
-	('先手', '飛'):vhishaImage,
-	('先手', '角'):vkakuImage,
-	('先手', '王'):vooImage,
-	('先手', 'と'):vtoImage,
-	('先手', '杏'):vnarikyouImage,
-	('先手', '圭'):vnarikeImage,
-	('先手', '全'):vnariginImage,
-	('先手', '竜'):vryuuImage,
-	('先手', '馬'):vumaImage,
-	('', '  '):zeroImage
-}
 
 def pasteboard(cv, shogistate):
 	board = shogistate.board
@@ -147,7 +83,15 @@ mainbase.pack()
 def closing():
 	root.destroy()
 root.protocol("WM_DELETE_WINDOW", closing)
+maingame = shogi.shogi()
+maingame.cameraAngle = '後手'
 
+KLA1 = simpleBot.autochesser([700, 14, 100, 124, 125, 6, 120, 22, 1])
+KLA2 = simpleBot.autochesser([700, 50, 110, 80, 211, 2, 80, 33, 1])
+dval1 = KLA1.valueing(maingame)
+dval2 = KLA2.valueing(maingame)
+val1 = 0
+val2 = 0
 
 while True:
 	mainbase.delete('all')
@@ -157,13 +101,26 @@ while True:
 	root.update()
 	maingame.getPML()
 	pml = maingame.possibleMoveList
+	maingame.printDefenseState()
 	if len(pml) == 0:
 		mainbase.pack()	
 		root.update_idletasks()
 		root.update()
 		print(maingame.moveRecorder[-1])
+		for move in maingame.moveRecorder:
+			print(move)
+		file.close()
 		while root:
 			root.update_idletasks()
 			root.update()
 	time.sleep(0.0001)
-	maingame.makeMove(random.choice(pml))
+	if maingame.chesser == '先手':
+		move, val1 = KLA1.getMove(maingame, 3, 10)
+		val1 -= dval1
+		val1 = int(val1)
+		print(val1)
+		maingame.makeMove(move)
+	else:
+		move = random.choice(maingame.possibleMoveList)
+		maingame.makeMove(move)
+	gc.collect()
