@@ -218,6 +218,8 @@ class autochesser:
 		shogistate.getPML()
 		if len(shogistate.possibleMoveList) == 0:
 			return ('', -999999999)
+		if len(shogistate.possibleMoveList) == 1:
+			return (shogistate.possibleMoveList[0], 0)
 		valuelist = list()
 		for move in shogistate.possibleMoveList:
 			newstate = copy.deepcopy(shogistate)
