@@ -56,13 +56,13 @@ all library has 3 main file, shogi.py, goma.py, and board.py
 and there is other trival method that can be used to get some information about board.
 in practice/ there are some example of using this shogi library
 
-<h3>about simpleBot.py:</h3>
+<h3>simpleBot.py:</h3>
 	construct a simpleBot by situation valueing, and scalable tree searching.
 	
-<h3>about guitest.py:</h3>
+<h3>guitest.py:</h3>
 	test.py with a GUI, images use font from http://modi.jpn.org/font_mushin.php
 	use tkinter to realize that.
 	
-<h3>about verseWeakBot.py:</h3>
+<h3>verseWeakBot.py:</h3>
 	a shogi game implement to play against a weak bot player
 
