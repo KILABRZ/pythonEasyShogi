@@ -63,6 +63,6 @@ in practice/ there are some example of using this shogi library
 	test.py with a GUI, images use font from http://modi.jpn.org/font_mushin.php
 	use tkinter to realize that.
 	
-<h3>verseWeakBot.py:</h3>
+<h3>verseWeakAI.py:</h3>
 	a shogi game implement to play against a weak bot player
 
