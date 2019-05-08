@@ -1,6 +1,8 @@
 import tkinter as tk
+
 import shogi
 import simpleBot
+
 import random
 import time
 import gc
@@ -9,6 +11,7 @@ import gc
 root = tk.Tk()
 
 from gomaImage import *
+
 W = 800
 H = 800
 DW = 175
@@ -120,14 +123,17 @@ def chooseMove(event):
 		gomaT = (0, 0) if maingame.chesser == '先手' else (10, 0)
 		if idx < 0 or idx >= len(maingame.board[gomaT]):
 			eventFlag = 'doNothing'
+			print('doesnt has', idx, 'goma')
 			return 0
 		while idx > 0:
 			if maingame.board[gomaT][idx] == maingame.board[gomaT][idx-1]:
 				idx -= 1
 			else:
 				break
-		prepos = (0, idx) if maingame.chesser == '先手' else (10, idx) 
+		prepos = (0, idx) if maingame.chesser == '先手' else (10, idx)
+		print(prepos)
 		possibleNextPos = [nextmove[1] for nextmove in maingame.possibleMoveList if nextmove[0] == prepos]
+		print(possibleNextPos)
 		if len(possibleNextPos) <= 0:
 			prepos = 0
 			eventFlag = 'doNothing'
@@ -209,7 +215,7 @@ def closing():
 root.protocol("WM_DELETE_WINDOW", closing)
 
 
-rival = simpleBot.autochesser([700, 14, 100, 124, 125, 6, 120, 22, 1])
+rival = simpleBot.autochesser([2000, 140, 200, 124, 325, 60, 120, 47, 51])
 
 dval = rival.valueing(maingame)
 val = 0
@@ -237,7 +243,7 @@ while True:
 			root.update()
 	time.sleep(0.0001)
 	if maingame.chesser == '先手':
-		move, val = rival.getMove(maingame, 3, 10)
+		move, val = rival.getMove(maingame, 1, 20)
 		val -= dval
 		val = int(val)
 		print(val)
@@ -256,4 +262,3 @@ while True:
 
 
 	gc.collect()
-

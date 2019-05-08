@@ -153,9 +153,7 @@ class shogi:
 	def isLegalMove(self, move):
 		underOteFlag = self.isUnderOte()
 		prePiecePos, newPiecePos, nari = move
-		if prePiecePos[0] < 0 or prePiecePos[0] > 10 or prePiecePos[1] < 0 or prePiecePos[1] > 10:
-			return False
-		if not legalPos(newPiecePos):
+		if newPiecePos[0] < 0 or newPiecePos[0] > 9 or newPiecePos[1] < 0 or newPiecePos[1] > 9:
 			return False
 		if self.board[newPiecePos][0] == self.chesser:
 			return False
@@ -229,6 +227,11 @@ class shogi:
 					self.board[newPiecePos] = ('', '  ')
 					self.stimulateFlag = False
 			return True
+
+		if prePiecePos[0] < 0 or prePiecePos[0] > 9 or prePiecePos[1] < 0 or prePiecePos[1] > 9:
+			return False
+		if not legalPos(newPiecePos):
+			return False
 		
 		if self.board[prePiecePos][0] != self.chesser:
 			return False
